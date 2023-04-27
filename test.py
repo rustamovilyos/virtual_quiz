@@ -1,116 +1,110 @@
-import os
-import sys
+# # import pickle
+# #
+# #
+# # with open('working/ref_name.pkl', 'rb') as f:
+# #     data = pickle.load(f)
+# #     print(data)
+# #
+# # with open('working/ref_embed.pkl', 'rb') as f:
+# #     data = pickle.load(f)
+# #     print(data)
+#
+# from tkinter import *
+# import cv2
+#
+# # Define a video capture object
+# vid = cv2.VideoCapture(0)
+#
+# # Declare the width and height in variables
+# width, height = 800, 600
+#
+# # Set the width and height
+# vid.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+# vid.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+#
+# # Create a GUI app
+# app = Tk()
+#
+# # Bind the app with Escape keyboard to
+# # quit app whenever pressed
+# app.bind('<Escape>', lambda e: app.quit())
+#
+# # Create a label and display it on app
+# label_widget = Label(app)
+# label_widget.pack()
+#
+#
+# # Create a function to open camera and
+# # display it in the label_widget on app
+#
+#
+# def open_camera():
+#     from working.auth import recognition
+#     recognition
+#     # # Capture the video frame by frame
+#     # _, frame = vid.read()
+#     #
+#     # # Convert image from one color space to other
+#     # opencv_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
+#     #
+#     # # Capture the latest frame and transform to image
+#     # captured_image = Image.fromarray(opencv_image)
+#     #
+#     # # Convert captured image to photoimage
+#     # photo_image = ImageTk.PhotoImage(image=captured_image)
+#     #
+#     # # Displaying photoimage in the label
+#     # label_widget.photo_image = photo_image
+#     #
+#     # # Configure image in the label
+#     # label_widget.configure(image=photo_image)
+#     #
+#     # # Repeat the same process after every 10 seconds
+#     # label_widget.after(10, open_camera)
+#
+#
+# # Create a button to open the camera in GUI app
+# button1 = Button(app, text="Open Camera", command=open_camera)
+# button1.pack()
+#
+# # Create an infinite loop for displaying app on screen
+# app.mainloop()
 
-import cv2
-import csv
-from cvzone.HandTrackingModule import HandDetector
-import cvzone
-import time
-
-cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-cap.set(3, 1920)
-cap.set(4, 1080)
-detector = HandDetector(detectionCon=0.8)
-pTime = 0
-
-
-class MCQ():
-    def __init__(self, data):
-        self.question = data[0]
-        self.choice1 = data[1]
-        self.choice2 = data[2]
-        self.choice3 = data[3]
-        self.choice4 = data[4]
-        self.answer = int(data[5])
-
-        self.userAns = None
-
-    def update(self, cursor, bboxs):
-
-        for x, bbox in enumerate(bboxs):
-            x1, y1, x2, y2 = bbox
-            if x1 < cursor[0] < x2 and y1 < cursor[1] < y2:
-                self.userAns = x + 1
-                cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), cv2.FILLED)
-
-
-# Import csv file data
-pathCSV = "Mcqs1.csv"
-with open(pathCSV, newline='\n') as f:
-    reader = csv.reader(f)
-    dataAll = list(reader)[1:]
-
-# Create Object for each MCQ
-mcqList = []
-for q in dataAll:
-    mcqList.append(MCQ(q))
-
-print("Total MCQ Objects Created:", len(mcqList))
-
-qNo = 0
-qTotal = len(dataAll)
+# def seidel(A, b, x0, tol=1e-8, max_iter=100):
+#     """
+#     Решает систему линейных уравнений Ax = b методом Зейделя.
+#
+#     :param A: матрица системы уравнений
+#     :param b: вектор свободных членов
+#     :param x0: начальное приближение
+#     :param tol: допустимая погрешность
+#     :param max_iter: максимальное число итераций
+#     :return: решение системы уравнений x
+#     """
+#
+#     n = len(A)
+#     x = x0.copy()
+#
+#     for k in range(max_iter):
+#         x_old = x.copy()
+#
+#         for i in range(n):
+#             s = sum(A[i][j] * x[j] for j in range(i))
+#             s += sum(A[i][j] * x_old[j] for j in range(i + 1, n))
+#             x[i] = (b[i] - s) / A[i][i]
+#
+#         if all(abs(x[i] - x_old[i]) < tol for i in range(n)):
+#             return x
+#
+#     raise ValueError("Решение не сошлось за заданное число итераций.")
+#
+#
+# A = [[4, 1, 1], [2, 7, 1], [1, 2, 6]]
+# b = [4, 9, 9]
+# x0 = [0, 0, 0]
+#
+# x = seidel(A, b, x0)
+#
+# print(x)  # Выводит решение системы уравнений
 
 
-def QuiT():
-    # success, img = cap.read()
-    # img = cv2.flip(img, 1)
-    # hands, img = detector.findHands(img, flipType=False)
-    #
-    # img, _ = cvzone.putTextRect(img, "Quiz Completed", [550, 100], 2, 2, offset=50, border=5)
-    # os.system('work.py')
-    exec(open('work.py').read())
-
-
-while True:
-    success, img = cap.read()
-    img = cv2.flip(img, 1)
-    hands, img = detector.findHands(img, flipType=False)
-
-    if qNo < qTotal:
-        mcq = mcqList[qNo]
-
-        img, bbox = cvzone.putTextRect(img, mcq.question, [100, 100], 2, 2, offset=50, border=5)
-        img, bbox1 = cvzone.putTextRect(img, mcq.choice1, [100, 250], 2, 2, offset=50, border=5)
-        img, bbox2 = cvzone.putTextRect(img, mcq.choice2, [400, 250], 2, 2, offset=50, border=5)
-        img, bbox3 = cvzone.putTextRect(img, mcq.choice3, [100, 400], 2, 2, offset=50, border=5)
-        img, bbox4 = cvzone.putTextRect(img, mcq.choice4, [400, 400], 2, 2, offset=50, border=5)
-        #
-        if hands:
-            lmList = hands[0]['lmList']
-            cursor = lmList[8]
-            length, info = detector.findDistance(lmList[8], lmList[12])
-            # print(length)
-
-            if length < 35:
-                mcq.update(cursor, [bbox1, bbox2, bbox3, bbox4])
-                if mcq.userAns is not None:
-                    time.sleep(0.3)
-                    qNo += 1
-    else:
-        score = 0
-        for mcq in mcqList:
-            if mcq.answer == mcq.userAns:
-                score += 1
-        score = round((score / qTotal) * 100, 2)
-        if hands:
-            lmList = hands[0]['lmList']
-            cursor = lmList[8]
-            length, info = detector.findDistance(lmList[8], lmList[12])
-            img, _ = cvzone.putTextRect(img, 'Next test', [400, 90], 2, 2, offset=50, border=5)
-            print(length)
-            if length > 140 and length < 181:
-                # img, _ = cvzone.putTextRect(img, 'test', [700, 90], 2, 2, offset=50, border=5)
-                img, _ = cvzone.putTextRect(img, QuiT(), [400, 100], 2, 2, offset=50, border=5)
-        img, _ = cvzone.putTextRect(img, 'Next test', [400, 90], 2, 2, offset=50, border=5)
-        img, _ = cvzone.putTextRect(img, "Quiz Completed", [250, 300], 2, 2, offset=50, border=5)
-        img, _ = cvzone.putTextRect(img, f'Your Score: {score}%', [700, 300], 2, 2, offset=50, border=5)
-
-    # Draw Progress Bar
-    barValue = 150 + (950 // qTotal) * qNo
-    cv2.rectangle(img, (150, 600), (barValue, 650), (0, 255, 0), cv2.FILLED)
-    cv2.rectangle(img, (150, 600), (1100, 650), (255, 0, 255), 5)
-    img, _ = cvzone.putTextRect(img, f'{round((qNo / qTotal) * 100)}%', [1130, 635], 2, 2, offset=16)
-
-    cv2.imshow("Img", img)
-    if cv2.waitKey(1) == ord('q'):
-        break
